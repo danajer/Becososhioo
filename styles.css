@@ -1,0 +1,498 @@
+/* === Reset & Base === */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'PT Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    line-height: 1.6;
+    color: #303030;
+    background-color: #FFFFFF;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* === Header === */
+.site-header {
+    padding: 20px 0;
+}
+
+/* === Skip Link === */
+.skip-link {
+    position: absolute;
+    top: -40px;
+    left: 0;
+    background: #1279BE;
+    color: white;
+    padding: 8px 16px;
+    text-decoration: none;
+    z-index: 100;
+}
+.skip-link:focus {
+    top: 0;
+}
+
+/* === Hero Section === */
+.hero-section {
+    background-color: #1279BE;
+    padding: 40px 20px;
+    border-radius: 8px;
+    margin: 20px 0;
+}
+
+.hero-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 30px;
+}
+
+@media (min-width: 782px) {
+    .hero-content {
+        flex-direction: row;
+    }
+}
+
+.hero-image {
+    flex: 1;
+}
+.hero-image img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+}
+
+/* === Form Section === */
+.form-section {
+    flex: 1;
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.form-title {
+    color: white;
+    font-size: 24px;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.contact-form {
+    background: white;
+    padding: 30px;
+    border-radius: 8px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-label {
+    display: block;
+    font-size: 15px;
+    font-weight: 600;
+    color: #303030;
+    margin-bottom: 5px;
+}
+
+.form-input {
+    width: 100%;
+    padding: 10px 12px;
+    font-size: 15px;
+    border: 1px solid #C5C5C5;
+    border-radius: 4px;
+    font-family: inherit;
+}
+.form-input:focus {
+    outline: 2px solid #1279BE;
+    outline-offset: 2px;
+    border-color: transparent;
+}
+
+/* Phone field specific */
+.phone-input-wrapper {
+    display: flex;
+    align-items: stretch;
+    border: 1px solid #C5C5C5;
+    border-radius: 4px;
+    background: white;
+}
+.phone-input-wrapper:focus-within {
+    outline: 2px solid #1279BE;
+    outline-offset: 2px;
+    border-color: transparent;
+}
+
+.country-code-selector {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 0 10px;
+    background: #f3f3f3;
+    border-right: 1px solid #C5C5C5;
+    border-radius: 4px 0 0 4px;
+    cursor: pointer;
+    position: relative;
+}
+
+.country-code-selector select {
+    padding: 10px 5px;
+    border: none;
+    background: transparent;
+    font-size: 15px;
+    font-family: inherit;
+    cursor: pointer;
+    outline: none;
+}
+
+.phone-number-input {
+    flex: 1;
+    padding: 10px 12px;
+    border: none;
+    font-size: 15px;
+    border-radius: 0 4px 4px 0;
+    outline: none;
+    min-width: 0;
+}
+
+/* Submit Button */
+.submit-button {
+    background-color: #FFB302;
+    color: white;
+    border: none;
+    border-radius: 9999px;
+    padding: 12px 30px;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+    width: 100%;
+    transition: background-color 0.3s;
+    position: relative;
+}
+.submit-button:hover {
+    background-color: #e5a100;
+}
+.submit-button:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+/* Telegram Verify Button */
+.telegram-verify-button {
+    background-color: #2AABEE; /* Biru Telegram */
+    color: white;
+    border: none;
+    border-radius: 9999px;
+    padding: 12px 30px;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+    width: 100%;
+    transition: background-color 0.3s;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+.telegram-verify-button:hover {
+    background-color: #229ED9;
+}
+.telegram-verify-button:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+.telegram-verify-button .button-text {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+/* WhatsApp Button */
+.whatsapp-button {
+    background-color: #25D366;
+    color: white;
+    border: none;
+    border-radius: 9999px;
+    padding: 12px 30px;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+    width: 100%;
+    transition: background-color 0.3s;
+    text-decoration: none;
+    display: inline-block;
+    text-align: center;
+    margin-top: 10px;
+}
+.whatsapp-button:hover {
+    background-color: #128C7E;
+}
+.whatsapp-button i {
+    margin-right: 6px;
+}
+
+/* Loading Spinner */
+.loading-spinner {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 3px solid rgba(255,255,255,0.3);
+    border-radius: 50%;
+    border-top-color: white;
+    animation: spin 1s ease-in-out infinite;
+    margin-right: 8px;
+}
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+.button-loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Loading Overlay untuk transisi halaman */
+.page-loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.95);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    transition: opacity 0.3s;
+}
+.page-loading-spinner {
+    width: 50px;
+    height: 50px;
+    border: 5px solid #f3f3f3;
+    border-top: 5px solid #1279BE;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-bottom: 20px;
+}
+.page-loading-text {
+    font-size: 18px;
+    color: #1279BE;
+    font-weight: bold;
+}
+.hidden {
+    display: none !important;
+}
+
+/* Error styling */
+.error-message {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 14px;
+    color: #d63638;
+    margin-top: 5px;
+}
+.error-message svg {
+    fill: currentColor;
+    width: 16px;
+    height: 16px;
+}
+
+/* Spacer */
+.spacer {
+    height: 200px;
+}
+
+/* Footer image */
+.footer-image {
+    margin-top: 40px;
+}
+.footer-image img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+/* === Footer === */
+.site-footer {
+    padding: 30px 20px;
+    text-align: center;
+    border-top: 1px solid #eee;
+    margin-top: 40px;
+}
+.site-footer a {
+    color: #1279BE;
+    text-decoration: none;
+}
+.site-footer a:hover {
+    text-decoration: underline;
+}
+
+/* === Marketing Bar === */
+.marketing-bar {
+    background-color: #1279BE;
+    color: white;
+    text-align: center;
+    padding: 15px 20px;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    z-index: 999;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+}
+.marketing-bar-button {
+    background: white;
+    color: #1279BE;
+    padding: 8px 20px;
+    border-radius: 4px;
+    text-decoration: none;
+    font-weight: bold;
+    display: inline-block;
+    cursor: pointer;
+    border: none;
+    font-size: 15px;
+}
+.marketing-bar-link {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    text-indent: -9999px;
+    overflow: hidden;
+}
+@media (max-width: 600px) {
+    .marketing-bar {
+        flex-direction: column;
+        gap: 10px;
+    }
+}
+
+/* Print styles */
+@media print {
+    .marketing-bar,
+    .skip-link {
+        display: none !important;
+    }
+}
+
+/* Utility */
+.text-center {
+    text-align: center;
+}
+.has-text-color {
+    color: #303030;
+}
+
+/* OTP Page Styles - Telegram Theme */
+.otp-container {
+    max-width: 400px;
+    margin: 50px auto;
+    padding: 30px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+}
+.telegram-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 20px;
+    color: #2AABEE;
+    font-size: 20px;
+    font-weight: bold;
+}
+.telegram-header i {
+    font-size: 28px;
+    color: #2AABEE;
+}
+.otp-title {
+    color: #2AABEE;
+    font-size: 24px;
+    margin-bottom: 10px;
+    text-align: center;
+}
+.otp-subtitle {
+    text-align: center;
+    margin-bottom: 30px;
+    color: #666;
+}
+.otp-input-group {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin-bottom: 30px;
+}
+.otp-input {
+    width: 50px;
+    height: 50px;
+    text-align: center;
+    font-size: 20px;
+    border: 1px solid #C5C5C5;
+    border-radius: 8px;
+    transition: border-color 0.2s;
+}
+.otp-input:focus {
+    outline: none;
+    border-color: #2AABEE;
+    box-shadow: 0 0 0 2px rgba(42,171,238,0.2);
+}
+.otp-timer {
+    text-align: center;
+    color: #2AABEE;
+    font-weight: bold;
+    margin-bottom: 20px;
+    font-size: 16px;
+}
+.otp-resend {
+    text-align: center;
+    margin-bottom: 20px;
+}
+.otp-resend a {
+    color: #2AABEE;
+    text-decoration: none;
+    font-weight: 600;
+}
+.otp-resend a:hover {
+    text-decoration: underline;
+}
+.user-info {
+    background: #f0f8ff;
+    padding: 10px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    text-align: center;
+    color: #2AABEE;
+    font-weight: 500;
+    border: 1px solid rgba(42,171,238,0.2);
+}
+.button-group {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 20px;
+}
+.help-text {
+    text-align: center;
+    font-size: 13px;
+    color: #999;
+    margin-top: 15px;
+}
+.help-text a {
+    color: #2AABEE;
+    text-decoration: none;
+        }
