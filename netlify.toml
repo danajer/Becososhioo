@@ -1,0 +1,13 @@
+# netlify.toml
+[build]
+  # Direktori tempat file statis (HTML, CSS, JS) berada
+  publish = "public"
+  
+  # Direktori tempat fungsi serverless berada
+  functions = "netlify/functions"
+
+# Pengaturan redirect (opsional, jika diperlukan)
+# [[redirects]]
+#   from = "/*"
+#   to = "/index.html"
+#   status = 200
